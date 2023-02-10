@@ -27,7 +27,7 @@ def download(src_path, dst_path, recursive):
         for path in dir:
             if path == "#recycle":
                 continue
-            download(f"/{src_path}/{path}", f"{dst_path}/{path}")
+            download(f"/{src_path}/{path}", f"{dst_path}/{path}", recursive)
 
 
 if __name__ == '__main__':
