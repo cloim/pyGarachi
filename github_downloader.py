@@ -12,7 +12,9 @@ class BearerAuthToken(requests.auth.AuthBase):
         self.GITHUB_KEY = access_token
 
     def __call__(self, r):
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         r.headers['Authorization'] = f'Bearer {self.GITHUB_KEY}'
+        print(r.headers)
         return r
 
 
@@ -50,7 +52,7 @@ if __name__ == '__main__':
     root_path = args.root_path[0]
     access_token = args.access_token[0]
     g = Github(access_token)
-    g.enable_console_debug_logging()
+    # g.enable_console_debug_logging()
     repo = g.get_repo(args.repo[0])
     contents = repo.get_contents(root_path)
 
