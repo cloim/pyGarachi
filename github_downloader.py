@@ -50,6 +50,7 @@ if __name__ == '__main__':
     root_path = args.root_path[0]
     access_token = args.access_token[0]
     g = Github(access_token)
+    g.enable_console_debug_logging()
     repo = g.get_repo(args.repo[0])
     contents = repo.get_contents(root_path)
 
