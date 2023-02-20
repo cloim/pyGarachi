@@ -32,9 +32,10 @@ def download(access_token, url, out_dir, filename):
     if os.path.exists(out_dir) == False:
         Path(out_dir).mkdir(parents=True)
 
-    requests.post("https://api.github.com/graphql", json={"query": "query { viewer { login }}"}, auth=BearerAuthToken(access_token))
+    session = requests.session()
+    session.post("https://api.github.com/graphql", json={"query": "query { viewer { login }}"}, auth=BearerAuthToken(access_token))
     
-    response = requests.get(url)
+    response = session.get(url)
     open(f"{out_dir}/{filename}", "wb").write(response.content)
 
 
