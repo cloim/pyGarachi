@@ -30,14 +30,11 @@ def get_path_and_filename(content, root_path, out_path):
         return path, filename
 
 
-def download(access_token, url, out_dir, filename):
+def download(url, out_dir, filename):
     if os.path.exists(out_dir) == False:
         Path(out_dir).mkdir(parents=True)
 
-    session = requests.session()
-    session.post("https://api.github.com/graphql", json={"query": "query { viewer { login }}"}, auth=BearerAuthToken(access_token))
-    
-    response = session.get(url)
+    response = requests.get(url)
     open(f"{out_dir}/{filename}", "wb").write(response.content)
 
 
@@ -52,7 +49,6 @@ if __name__ == '__main__':
     root_path = args.root_path[0]
     access_token = args.access_token[0]
     g = Github(access_token)
-    # g.enable_console_debug_logging()
     repo = g.get_repo(args.repo[0])
     contents = repo.get_contents(root_path)
 
@@ -64,4 +60,4 @@ if __name__ == '__main__':
         if file_content.type == "dir":
             contents.extend(repo.get_contents(file_content.path))
         elif filename is not None:
-            download(access_token, file_content.download_url, out_dir, filename)
+            download(file_content.download_url, out_dir, filename)
