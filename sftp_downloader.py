@@ -31,7 +31,7 @@ def download(src_path, dst_path, recursive):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="setup_config")
+    parser = argparse.ArgumentParser(description="SFTP Downloader")
     parser.add_argument("host", nargs=1, type=str, metavar="host", help="SFTP Host address")
     parser.add_argument("-p", "--port", type=int, help="SFTP Service port")
     parser.add_argument("-u", "--uid", type=str, help="User ID")
