@@ -5,6 +5,17 @@ from github import Github
 from pathlib import Path
 
 
+class BearerAuthToken(requests.auth.AuthBase):
+    GITHUB_KEY = ""
+
+    def __init__(self, access_token):
+        self.GITHUB_KEY = access_token
+
+    def __call__(self, r):
+        r.headers['Authorization'] = f'Bearer {self.GITHUB_KEY}'
+        return r
+
+
 def get_path_and_filename(content, root_path, out_path):
     d = content.path.replace(root_path, "")
     if d[:1] == "/":
@@ -17,10 +28,12 @@ def get_path_and_filename(content, root_path, out_path):
         return path, filename
 
 
-def download(url, out_dir, filename):
+def download(access_token, url, out_dir, filename):
     if os.path.exists(out_dir) == False:
         Path(out_dir).mkdir(parents=True)
 
+    requests.post("https://api.github.com/graphql", json={"query": "query { viewer { login }}"}, auth=BearerAuthToken(access_token))
+    
     response = requests.get(url)
     open(f"{out_dir}/{filename}", "wb").write(response.content)
 
@@ -34,7 +47,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     root_path = args.root_path[0]
-    g = Github(args.access_token[0])
+    access_token = args.access_token[0]
+    g = Github(access_token)
     repo = g.get_repo(args.repo[0])
     contents = repo.get_contents(root_path)
 
@@ -46,4 +60,4 @@ if __name__ == '__main__':
         if file_content.type == "dir":
             contents.extend(repo.get_contents(file_content.path))
         elif filename is not None:
-            download(file_content.download_url, out_dir, filename)
+            download(access_token, file_content.download_url, out_dir, filename)
