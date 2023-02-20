@@ -33,7 +33,6 @@ if __name__ == '__main__':
     parser.add_argument("access_token", nargs=1, type=str, metavar="access_token", help="Access Token")
     args = parser.parse_args()
 
-    # python github_downloader.py cloim/garage SDWebUI D:\Code\PYTHON\pyGarachi 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
     root_path = args.root_path[0]
     g = Github(args.access_token[0])
     repo = g.get_repo(args.repo[0])
